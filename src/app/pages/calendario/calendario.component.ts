@@ -1,27 +1,38 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
-import { DxSchedulerModule, DxToolbarModule } from 'devextreme-angular';
-import CustomStore from 'devextreme/data/custom_store';
+import { DxPopoverComponent, DxSchedulerComponent, DxSchedulerModule, DxToolbarModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { OContext } from '../../helpers/ocontext';
 import { AppointState } from '../../helpers/appoint-state';
+import { AppointmentClickEvent, AppointmentFormOpeningEvent } from 'devextreme/ui/scheduler';
+import { EditCitaComponent } from './components/edit-cita/edit-cita.component';
 
 @Component({
   selector: 'app-calendario',
   standalone: true,
-  imports: [CommonModule, DxSchedulerModule, DxToolbarModule],
+  imports: [CommonModule, DxSchedulerModule, DxToolbarModule, EditCitaComponent],
   templateUrl: './calendario.component.html',
   styleUrl: './calendario.component.scss'
 })
 export class CalendarioComponent implements OnInit, OnDestroy {
+  @ViewChild('editCita')
+  editCita?: EditCitaComponent;
+
+  @ViewChild('scheduler')
+  scheduler?: DxSchedulerComponent;
+
   private connection: HubConnection;
 
   states = AppointState();
 
   store = OContext.Calendarios();
   clendariosDs = new DataSource({
-    store: this.store
+    store: this.store,
+    expand: ['ContactoNavigation'],
+    postProcess: (data) => {
+      return data;
+    }
   });
 
   constructor() {
@@ -68,11 +79,20 @@ export class CalendarioComponent implements OnInit, OnDestroy {
     }
   }
 
+  formatPhone = (code: string, phone: string) => {
+    const p1 = phone.substring(0, 3);
+    const p2 = phone.substring(3, 6);
+    const p3 = phone.substring(6, 10);
+
+    return `(+${code}) ${p1}-${p2}-${p3}`;
+  }
+
   ngOnDestroy(): void {
     if (this.connection.state == HubConnectionState.Connected) {
       this.connection.stop();
     }
   }
+
   ngOnInit(): void {
     this.connection.start()
       .then(_ => {
@@ -80,5 +100,17 @@ export class CalendarioComponent implements OnInit, OnDestroy {
       }).catch(error => {
         return console.error(error);
       });
+  }
+
+  onAddAppointment = () => {
+    this.editCita?.show();
+  }
+
+  onAppointmentFormOpening = async (e: AppointmentFormOpeningEvent) => {
+    e.cancel = true;
+    const res = await this.editCita?.show(e.appointmentData);
+    if(res){
+      this.clendariosDs.reload();
+    }
   }
 }

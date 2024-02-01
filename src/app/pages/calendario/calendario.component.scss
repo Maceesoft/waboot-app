@@ -1,31 +1,61 @@
-
 .toolbar {
-    background-color: white;
+  background-color: white;
+  padding: 0 5px;
+}
+
+::ng-deep .dx-scheduler-appointment {
+  background-color: transparent;
+  min-height: 30px;
+}
+
+::ng-deep .dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content,
+.dx-scheduler-overlay-panel .dx-overlay-content {
+  padding: 0;
+  width: 100%;
+}
+
+.tooltip {
+  padding: 5px;
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: start;
+  justify-content: stretch;
+  width: 100%!important;
+}
+
+.tooltip-state {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .appoint {
-    font-size: 9px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 6px;
+  padding: 0 5px;
 }
 
 .appoint-enviado {
-    background-color: #58d6fd;
-    color: #225463;
+  background-color: #b6eeff;
+  color: #10b1e2;
 }
 
 .appoint-cancelado {
-    background-color: #ff7233;
-    color: #652d13;
+  background-color: #f6bea4;
+  color: red;
 }
 
 .appoint-aceptado {
-    background-color: #16cc26;
-    color: green;
+  background-color: #a8e1ad;
+  color: green;
 }
 
 .appoint-perdido {
-    background-color: #ffc531;
-    color: #99751d;
+  background-color: rgb(219, 219, 219);
+  color: rgb(102, 102, 102);
 }

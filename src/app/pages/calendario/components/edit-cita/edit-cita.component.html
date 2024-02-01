@@ -1,0 +1,31 @@
+<dx-popup #popEdit width="100%" [maxWidth]="450" height="auto" title="Editar Cita" [(visible)]="visible"
+    (onHidden)="onHidden()" (onHiding)="onHiding($event)">
+    <dx-form #form [colCount]="2" [(formData)]="formdata" [readOnly]="loading">
+        <dxi-item dataField="Asunto" [colSpan]="2">
+            <dxi-validation-rule type="required" />
+        </dxi-item>
+        <dxi-item dataField="Finicio" editorType="dxDateBox"
+            [editorOptions]="{type: 'datetime', dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ'}">
+            <dxo-label text="Fercha Inicio" />
+            <dxi-validation-rule type="required" />
+        </dxi-item>
+        <dxi-item dataField="Ftermino" editorType="dxDateBox"
+            [editorOptions]="{type: 'datetime', dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ'}">
+            <dxo-label text=" Fercha Termino" />
+            <dxi-validation-rule type="required" />
+        </dxi-item>
+        <dxi-item dataField="Descripcion" editorType="dxTextArea" [colSpan]="2">
+            <dxi-validation-rule type="required" />
+        </dxi-item>
+        @if(!!formdata?.Id) {
+        <dxi-item dataField="Status" editorType="dxSelectBox"
+            [editorOptions]="{dataSource: states, displayExpr: 'text', valueExpr: 'value', readOnly: true}">
+            <dxo-label text="Estado de la Cita" />
+        </dxi-item>
+        }
+    </dx-form>
+    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+        [options]="{text: 'Guardar', type: 'default', stylingMode: 'contained', onClick: ok, disabled: loading}" />
+    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+        [options]="{text: 'Cancelar', onClick: cancel, disabled: loading}" />
+</dx-popup>

@@ -1,13 +1,43 @@
-<dx-toolbar class="toolbar"></dx-toolbar>
-<dx-scheduler currentView="week" [views]="['day', 'week', 'agenda']" [showCurrentTimeIndicator]="true"
+<dx-toolbar class="toolbar">
+    <dxi-item widget="dxButton" location="after"
+        [options]="{icon: 'plus', text: 'Nueva Cita', type: 'default', stylingMode: 'contained', onClick: onAddAppointment}" />
+</dx-toolbar>
+<dx-scheduler #scheduler currentView="week" [views]="['day', 'week', 'month', 'agenda']" [showCurrentTimeIndicator]="true"
     [dataSource]="clendariosDs" [shadeUntilCurrentTime]="true" [useDropDownViewSwitcher]="false" endDateExpr="Ftermino"
-    startDateExpr="Finicio" textExpr="Asunto" appointmentTemplate="appoint-template" descriptionExpr="Descripcion">
+    startDateExpr="Finicio" textExpr="Asunto" appointmentTemplate="appoint-template" descriptionExpr="Descripcion"
+    [maxAppointmentsPerCell]="2" appointmentTooltipTemplate="tooltip-template"
+    (onAppointmentFormOpening)="onAppointmentFormOpening($event)">
     <div *dxTemplate="let model of 'appoint-template'" class="appoint"
         [ngClass]="getClassByState(model.appointmentData.Status)">
         <i [ngClass]="getIconByState(model.appointmentData.Status)" style="font-size: 20px;"></i>
         <div>
-            De: <b>{{model.appointmentData.Finicio | date : 'HH:mm aa'}}</b>
-            A: <b>{{model.appointmentData.Ftermino | date : 'HH:mm aa'}}</b>
+            <b>{{model.appointmentData.Finicio | date : 'hh:mm aa'}}</b>
+            - <b>{{model.appointmentData.Ftermino | date : 'hh:mm aa'}}</b>
+        </div>
+    </div>
+    <div *dxTemplate="let model of 'tooltip-template'" class="tooltip"
+        [ngClass]="getClassByState(model.appointmentData.Status)">
+        <div style="text-transform: uppercase; font-size: 12px; display: flex; gap: 5px; align-items: center;">
+            <i class="fa-solid fa-user"></i><b>{{model.appointmentData.ContactoNavigation.Nombre}}</b>
+        </div>
+        <div
+            style="display: flex; flex-direction: column; align-items: start; padding-left: 10px; gap: 5px; font-size: 8px;">
+            <div style="display: flex; gap: 5px; align-items: center;"><i class="fa-solid fa-calendar"></i>De:
+                <b>{{model.appointmentData.Finicio | date : 'dd/MMM/yyyy - hh:mm aa'}}</b>
+            </div>
+            <div style="display: flex; gap: 5px; align-items: center;"><i class="fa-solid fa-calendar"></i>
+                &nbsp;&nbsp;A: <b>{{model.appointmentData.Ftermino | date :
+                    'dd/MMM/yyyy - hh:mm aa'}}</b></div>
+            <div style="display: flex; gap: 5px; align-items: center;">
+                <i class="fa-solid fa-phone"></i>
+                <b>{{formatPhone(model.appointmentData.ContactoNavigation.Codigo,
+                    model.appointmentData.ContactoNavigation.WhatsApp)}}</b>
+            </div>
+        </div>
+        <div class="tooltip-state">
+            <i [ngClass]="getIconByState(model.appointmentData.Status)" style="font-size: 14px;"></i>
+            <div style="text-transform: uppercase;"><b>{{getState(model.appointmentData.Status)}}</b></div>
         </div>
     </div>
 </dx-scheduler>
+<edit-cita #editCita />

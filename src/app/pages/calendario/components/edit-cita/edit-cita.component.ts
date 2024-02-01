@@ -1,0 +1,72 @@
+import { CommonModule } from '@angular/common';
+import { Component, ViewChild, signal } from '@angular/core';
+import { DxFormComponent, DxFormModule, DxPopupModule, DxTextAreaModule } from 'devextreme-angular';
+import { Subject, firstValueFrom } from 'rxjs';
+import { AppointStateArray } from '../../../../helpers/appoint-state';
+import { HidingEvent } from 'devextreme/ui/popup';
+import { OContext } from '../../../../helpers/ocontext';
+import { alert } from 'devextreme/ui/dialog';
+
+@Component({
+  selector: 'edit-cita',
+  standalone: true,
+  imports: [CommonModule, DxPopupModule, DxFormModule, DxTextAreaModule],
+  templateUrl: './edit-cita.component.html',
+  styleUrl: './edit-cita.component.scss'
+})
+export class EditCitaComponent {
+  @ViewChild('form')
+  form?: DxFormComponent;
+  loading = false;
+  formdata: any = {};
+  visible = false;
+  result?: Subject<boolean>;
+  states = AppointStateArray();
+
+  show = (data?: any) => {
+    this.formdata = {
+      ...data
+    };
+    this.visible = true;
+    this.result = new Subject<boolean>();
+
+    return firstValueFrom(this.result);
+  }
+
+  onHiding = (e: HidingEvent) => {
+    e.cancel = this.loading;
+  }
+
+  onHidden = () => {
+    this.form?.instance.reset();
+  }
+
+  ok = async () => {
+    if (this.form?.instance.validate().isValid) {
+      this.loading = true;
+
+      try {
+        if (!!this.formdata.Id) {
+          delete this.formdata['ContactoNavigation'];
+          await OContext.Calendarios().update(this.formdata.Id, this.formdata);
+        } else {
+          await OContext.Calendarios().insert(this.formdata);
+        }
+        this.result?.next(true);
+        this.result?.complete();
+        this.visible = false;
+      } catch (e) {
+        console.log(e);
+        alert('Ocurrio un error durante el guardado', 'Error');
+      } finally {
+        this.loading = false;
+      }
+    }
+  }
+
+  cancel = () => {
+    this.visible = false;
+    this.result?.next(false);
+    this.result?.complete();
+  }
+}
