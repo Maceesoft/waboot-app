@@ -1,0 +1,18 @@
+<ng-content></ng-content>
+
+<div class="menu-container">
+  <dx-tree-view [items]="items" keyExpr="path" selectionMode="single" [focusStateEnabled]="false" expandEvent="click"
+    (onItemClick)="onItemClick($event)" width="100%">
+  </dx-tree-view>
+</div>
+<div class="user-container">
+  <div (click)="onPerfilClick()">
+    <span class="avatar">
+      <span>
+        {{user.toUpperCase()[0]}}
+      </span>
+    </span>
+    <span>{{user}}</span>
+  </div>
+  <i class="fa-solid fa-arrow-right-from-bracket" (click)="auth.logOut()"></i>
+</div>

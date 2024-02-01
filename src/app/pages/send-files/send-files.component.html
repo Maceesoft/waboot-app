@@ -1,0 +1,13 @@
+<div style="position: relative;">
+    <h3>Enviar Documentos por WhattsApp</h3>
+    <div style="padding: 10px; display: flex; gap: 10px;">
+        <button (click)="add()">Agregar</button>
+        <button (click)="guardar()">Enviar Todo</button>
+    </div>
+    <ng-container #container class="container-group">
+
+    </ng-container>
+    @if(loading) {
+    <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(180, 180, 180, 0.5)"></div>
+    }
+</div>

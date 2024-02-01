@@ -1,0 +1,70 @@
+label {
+  display: flex;
+  flex-direction: column;
+}
+
+label > input {
+  appearance: none;
+  border: none;
+  outline: none;
+  background-color: #fefefe;
+  border: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  border-radius: 0.4em;
+  padding: 0.4em 0.6em;
+}
+
+label > input:focus {
+  border-bottom: 1px solid #e91e63;
+  border-radius: 0.4em;
+  padding: 0.4em 0.6em;
+}
+
+fieldset {
+  background-color: white;
+  text-align: left;
+  border: 1px solid #dddddd;
+  border-radius: 1em;
+  margin: 5px;
+  padding: 5px;
+  position: relative;
+  legend {
+    margin-left: 20px;
+    background-color: #e91e63;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 10px;
+    min-width: 70px;
+  }
+}
+
+fieldset:focus-within {
+  border: 1px solid #e91e63;
+}
+
+.tools {
+  position: absolute; 
+  right: 15px; 
+  top:  2px;
+}
+
+.tools > i {
+  cursor: pointer;
+  padding: 5px;
+}
+
+.tools > i:hover {
+  background-color: #e91e63;
+  color: white;
+  border-radius: 5px;
+}
+
+.tools > i:active {
+  color: unset;
+  background-color: unset
+}
+
+fieldset.invalid {
+  background-color: rgba($color: #e91e63, $alpha: 0.1);
+  color: #e91e63;
+}

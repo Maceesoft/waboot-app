@@ -1,0 +1,51 @@
+<dx-data-grid #grid [dataSource]="contactosDs" [showColumnLines]="true" [wordWrapEnabled]="true"
+    (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" (onRowInserting)="onRowInserting($event)"
+    [rowAlternationEnabled]="true">
+    <dxo-editing [enabled]="true" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" mode="popup">
+        <dxo-popup title="Editar Contacto" [showTitle]="true" width="100%" [maxWidth]="500" height="auto" />
+        <dxo-form [colCount]="1">
+            <dxi-item dataField="Nombre">
+                <dxi-validation-rule type="required" />
+            </dxi-item>
+            <dxi-item dataField="Codigo" [visible]="false">
+                <dxi-validation-rule type="required" />
+            </dxi-item>
+            <dxi-item dataField="WhatsApp" [editorOptions]="{mask: '(X00) 000-0000', maskRules: phoneRules,
+                buttons: [
+                    {
+                        name: 'country',
+                        location: 'before',
+                        options: {
+                            icon: country?.icon,
+                            stylingMode: 'text',
+                            text: '+' + (country?.value ?? ''),
+                            elementAttr: {id: 'btnCountry'},
+                            onClick: showCountryMenu
+                        }
+                    }
+                ]}">
+                <dxi-validation-rule type="required" />
+            </dxi-item>
+        </dxo-form>
+    </dxo-editing>
+    <dxo-toolbar>
+        <dxi-item location="before">
+            <span class="grid-title ">
+                <i class="fa-light fa-address-card"></i>
+                Contactos
+            </span>
+        </dxi-item>
+        <dxi-item widget="dxButton"
+            [options]="{icon: 'plus', text: 'NUEVO', type: 'default', stylingMode: 'contained', onClick: onAddNewClick}" />
+    </dxo-toolbar>
+    <dxi-column dataField="Id" [visible]="false" [showInColumnChooser]="false" />
+    <dxi-column dataField="Nombre" />
+    <dxi-column dataField="WhatsApp" caption="Numero Telefonico con WhatsApp"
+        [calculateDisplayValue]="customizePhoneText" />
+    <dxi-column dataField="Codigo" [visible]="false" [showInColumnChooser]="false" />
+</dx-data-grid>
+<dx-context-menu #menucountry [items]="countryMenu" target="#btnCountry" showEvent="dxclick"
+    (onItemClick)="onMenuCountryClick($event)">
+    <dxo-position my="left top" at="left bottom" of="#btnCountry">
+    </dxo-position>
+</dx-context-menu>

@@ -1,0 +1,22 @@
+<fieldset [ngClass]="_isValid? '': 'invalid'">
+    <legend>Documento {{index}}</legend>
+    <div style="padding: 10px; display: flex; flex-direction: column; gap: 10px;">
+        <label>
+            Archivo PDF
+            <input name="pdf" placeholder="Ingrese una Url del archivo PDF" [value]="data.pdf" (change)="changeInput($event)">
+        </label>
+        <div style="display: flex; gap: 10px;">
+            <label style="flex: 1;">
+                Numero del Telefono
+                <input name="name" placeholder="Enter numero de telefono" type="number" [value]="data.name" (change)="changeInput($event)">
+            </label>
+            <label style="flex: 1;">
+                Variable #1
+                <input name="phone" placeholder="Enter a variable #1" [value]="data.phone" (change)="changeInput($event)">
+            </label>
+        </div>
+    </div>
+    <div class="tools">
+        <i class="fa-solid fa-xmark" (click)="clickClose()"></i>
+    </div>
+</fieldset>

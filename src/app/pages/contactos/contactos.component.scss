@@ -1,0 +1,12 @@
+@import "../../../themes/generated/variables.base.scss";
+
+:host {
+    display: block;
+    padding: 10px;
+}
+
+.grid-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: $base-accent;
+}

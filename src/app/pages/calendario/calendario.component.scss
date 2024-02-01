@@ -1,0 +1,31 @@
+
+.toolbar {
+    background-color: white;
+}
+
+.appoint {
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.appoint-enviado {
+    background-color: #58d6fd;
+    color: #225463;
+}
+
+.appoint-cancelado {
+    background-color: #ff7233;
+    color: #652d13;
+}
+
+.appoint-aceptado {
+    background-color: #16cc26;
+    color: green;
+}
+
+.appoint-perdido {
+    background-color: #ffc531;
+    color: #99751d;
+}

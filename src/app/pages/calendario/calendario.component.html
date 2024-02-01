@@ -1,0 +1,13 @@
+<dx-toolbar class="toolbar"></dx-toolbar>
+<dx-scheduler currentView="week" [views]="['day', 'week', 'agenda']" [showCurrentTimeIndicator]="true"
+    [dataSource]="clendariosDs" [shadeUntilCurrentTime]="true" [useDropDownViewSwitcher]="false" endDateExpr="Ftermino"
+    startDateExpr="Finicio" textExpr="Asunto" appointmentTemplate="appoint-template" descriptionExpr="Descripcion">
+    <div *dxTemplate="let model of 'appoint-template'" class="appoint"
+        [ngClass]="getClassByState(model.appointmentData.Status)">
+        <i [ngClass]="getIconByState(model.appointmentData.Status)" style="font-size: 20px;"></i>
+        <div>
+            De: <b>{{model.appointmentData.Finicio | date : 'HH:mm aa'}}</b>
+            A: <b>{{model.appointmentData.Ftermino | date : 'HH:mm aa'}}</b>
+        </div>
+    </div>
+</dx-scheduler>

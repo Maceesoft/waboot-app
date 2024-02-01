@@ -1,0 +1,36 @@
+.card-kpi {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  user-select: none;
+  border-width: 1px;
+  border-style: solid;
+
+  i {
+    font-size: 24px;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .title {
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0px;
+    }
+
+    .count {
+      font-size: 24px;
+      font-weight: 900;
+      text-align: center;
+    }
+  }
+}

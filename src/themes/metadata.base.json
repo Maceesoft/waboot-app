@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "key": "$base-accent",
+      "value": "rgba(0, 27, 121, 1)"
+    }
+  ],
+  "baseTheme": "fluent.saas.light.compact",
+  "assetsBasePath": "../../../node_modules/devextreme/dist/css/",
+  "outputColorScheme": "base",
+  "base": true
+}

@@ -1,0 +1,23 @@
+.container-group {
+  display: flex;
+  padding: 10px;
+  background-color: aqua;
+}
+
+button {
+  border: none;
+  background-color: rgba($color: #e91e63, $alpha: 0.1);
+  color: rgba($color: #e91e63, $alpha: 1);
+  padding: 5px 15px;
+  cursor: pointer;
+  border-radius: 10px;
+  min-width: 80px;
+}
+
+button:hover {
+  background-color: rgba($color: #e91e63, $alpha: 0.3);
+}
+
+button:active {
+    background-color: rgba($color: #e91e63, $alpha: 0.1);
+  }
