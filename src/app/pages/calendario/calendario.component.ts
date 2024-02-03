@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
-import { DxPopoverComponent, DxSchedulerComponent, DxSchedulerModule, DxToolbarModule } from 'devextreme-angular';
+import { DxSchedulerComponent, DxSchedulerModule, DxToolbarModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { OContext } from '../../helpers/ocontext';
 import { AppointState } from '../../helpers/appoint-state';
-import { AppointmentClickEvent, AppointmentFormOpeningEvent } from 'devextreme/ui/scheduler';
+import { AppointmentFormOpeningEvent } from 'devextreme/ui/scheduler';
 import { EditCitaComponent } from './components/edit-cita/edit-cita.component';
+import { StoreX } from '../../libs/store';
+import { AuthData } from '../../models/auth-data';
 
 @Component({
   selector: 'app-calendario',
@@ -22,35 +24,44 @@ export class CalendarioComponent implements OnInit, OnDestroy {
   @ViewChild('scheduler')
   scheduler?: DxSchedulerComponent;
 
-  private connection: HubConnection;
+  private connection?: HubConnection;
 
   states = AppointState();
+
+  authData = StoreX.session.getObj<AuthData>('auth');
+  currentId = this.authData?.user.padre ?? this.authData?.user.id;
 
   store = OContext.Calendarios();
   clendariosDs = new DataSource({
     store: this.store,
-    expand: ['ContactoNavigation'],
-    postProcess: (data) => {
-      return data;
-    }
+    filter: ['Usuario', '=', this.currentId],
+    expand: ['ContactoNavigation']
   });
 
   constructor() {
+
     this.connection = new HubConnectionBuilder()
       .withUrl('https://wb.maceesoft.com/hub', {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets
       }).build();
 
-    this.connection.on('insert', (data: any) => {
-      data.color = '#56ca85';
+
+    this.connection?.on('insert', (data: any) => {
       this.store.push([{ type: 'insert', data }]);
       console.log(data);
     });
 
-    this.connection.on('delete', (key) => {
-      this.store.push([{ type: 'remove', key }])
+    this.connection?.on('update', (data: any) => {
+      this.store.push([{ type: 'update', data, key: data.Id }]);
+      console.log(data);
     });
+
+    this.connection?.on('delete', (data) => {
+      this.store.push([{ type: 'remove', key: data.Id }]);
+      console.log(data);
+    });
+
   }
 
   getState = (e: number) => {
@@ -88,29 +99,34 @@ export class CalendarioComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.connection.state == HubConnectionState.Connected) {
+
+    if (this.connection?.state == HubConnectionState.Connected) {
       this.connection.stop();
     }
+
   }
 
   ngOnInit(): void {
-    this.connection.start()
+
+    this.connection?.start()
       .then(_ => {
         console.log('Connection Started');
       }).catch(error => {
         return console.error(error);
       });
+
   }
 
   onAddAppointment = () => {
     this.editCita?.show();
   }
 
+  onRefreshView = async () => {
+    await this.clendariosDs.reload();
+  }
+
   onAppointmentFormOpening = async (e: AppointmentFormOpeningEvent) => {
     e.cancel = true;
-    const res = await this.editCita?.show(e.appointmentData);
-    if(res){
-      this.clendariosDs.reload();
-    }
+    await this.editCita?.show(e.appointmentData);
   }
 }

@@ -4,13 +4,17 @@
         <dxi-item dataField="Asunto" [colSpan]="2">
             <dxi-validation-rule type="required" />
         </dxi-item>
+        <dxi-item dataField="Contacto" [colSpan]="2" editorType="dxSelectBox"
+            [editorOptions]="{dataSource: contactos, displayExpr: 'Nombre', valueExpr: 'Id'}">
+            <dxi-validation-rule type="required" />
+        </dxi-item>
         <dxi-item dataField="Finicio" editorType="dxDateBox"
-            [editorOptions]="{type: 'datetime', dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ'}">
+            [editorOptions]="{type: 'datetime', displayFormat: 'yyyy-MM-dd HH:mm', dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ'}">
             <dxo-label text="Fercha Inicio" />
             <dxi-validation-rule type="required" />
         </dxi-item>
         <dxi-item dataField="Ftermino" editorType="dxDateBox"
-            [editorOptions]="{type: 'datetime', dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ'}">
+            [editorOptions]="{type: 'datetime', displayFormat: 'yyyy-MM-dd HH:mm',dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ'}">
             <dxo-label text=" Fercha Termino" />
             <dxi-validation-rule type="required" />
         </dxi-item>

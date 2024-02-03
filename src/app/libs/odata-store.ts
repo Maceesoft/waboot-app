@@ -25,6 +25,7 @@ export class ODStore<TItem = any, TKey = any> extends ODataStore<TItem, TKey> {
             keyType: options?.keyType ?? 'Int32',
             url: _resolveUrl(options?.url),
             withCredentials: true,
+            deserializeDates: false,
             errorHandler(e) {
                 console.log(e);
             },

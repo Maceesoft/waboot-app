@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, signal } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DxFormComponent, DxFormModule, DxPopupModule, DxTextAreaModule } from 'devextreme-angular';
 import { Subject, firstValueFrom } from 'rxjs';
 import { AppointStateArray } from '../../../../helpers/appoint-state';
 import { HidingEvent } from 'devextreme/ui/popup';
 import { OContext } from '../../../../helpers/ocontext';
 import { alert } from 'devextreme/ui/dialog';
+import DataSource from 'devextreme/data/data_source';
+import { StoreX } from '../../../../libs/store';
+import { AuthData } from '../../../../models/auth-data';
 
 @Component({
   selector: 'edit-cita',
@@ -22,6 +25,13 @@ export class EditCitaComponent {
   visible = false;
   result?: Subject<boolean>;
   states = AppointStateArray();
+  authData = StoreX.session.getObj<AuthData>('auth');
+  currentId = this.authData?.user.padre ?? this.authData?.user.id;
+
+  contactos = new DataSource({
+    store: OContext.Contactos(),
+    filter: ['Usuario', '=', this.currentId]
+  });
 
   show = (data?: any) => {
     this.formdata = {
@@ -50,7 +60,11 @@ export class EditCitaComponent {
           delete this.formdata['ContactoNavigation'];
           await OContext.Calendarios().update(this.formdata.Id, this.formdata);
         } else {
-          await OContext.Calendarios().insert(this.formdata);
+          await OContext.Calendarios().insert({
+            ...this.formdata,
+            'Usuario': this.currentId,
+            Status: 1
+          });
         }
         this.result?.next(true);
         this.result?.complete();
