@@ -1,19 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
-import { DxSchedulerComponent, DxSchedulerModule, DxToolbarModule } from 'devextreme-angular';
+import { DxContextMenuModule, DxSchedulerComponent, DxSchedulerModule, DxToolbarModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { OContext } from '../../helpers/ocontext';
 import { AppointState } from '../../helpers/appoint-state';
-import { AppointmentFormOpeningEvent } from 'devextreme/ui/scheduler';
+import { AppointmentContextMenuEvent, AppointmentFormOpeningEvent, CellContextMenuEvent, ViewType } from 'devextreme/ui/scheduler';
 import { EditCitaComponent } from './components/edit-cita/edit-cita.component';
 import { StoreX } from '../../libs/store';
 import { AuthData } from '../../models/auth-data';
+import { Calendario } from '../../models/calendario';
+import notify from 'devextreme/ui/notify';
+import { Setting } from '../../helpers/setting';
 
 @Component({
   selector: 'app-calendario',
   standalone: true,
-  imports: [CommonModule, DxSchedulerModule, DxToolbarModule, EditCitaComponent],
+  imports: [CommonModule, DxSchedulerModule, DxToolbarModule, EditCitaComponent, DxContextMenuModule],
   templateUrl: './calendario.component.html',
   styleUrl: './calendario.component.scss'
 })
@@ -26,10 +29,28 @@ export class CalendarioComponent implements OnInit, OnDestroy {
 
   private connection?: HubConnection;
 
-  states = AppointState();
+  currentView: ViewType = 'day';
 
+  appointmentClassName = '.dx-scheduler-appointment';
+  cellClassName = '.dx-scheduler-date-table-cell';
+  target: string = this.appointmentClassName;
+
+  states = AppointState();
+  appointmentData: any;
   authData = StoreX.session.getObj<AuthData>('auth');
   currentId = this.authData?.user.padre ?? this.authData?.user.id;
+  menuEdit = [
+    {
+      icon: 'fa-light fa-pen-to-square',
+      text: 'Editar Cita',
+      onItemClick: async () => await this.editCita?.show(this.appointmentData)
+    }, {
+      beginGroup: true,
+      text: 'Eliminar Cita',
+      icon: 'fa-light fa-trash-can'
+    }
+  ];
+  contextMenuItems = this.menuEdit;
 
   store = OContext.Calendarios();
   clendariosDs = new DataSource({
@@ -41,27 +62,27 @@ export class CalendarioComponent implements OnInit, OnDestroy {
   constructor() {
 
     this.connection = new HubConnectionBuilder()
-      .withUrl('https://wb.maceesoft.com/hub', {
+      .withUrl(`${Setting.getDomain()}/hub`, {
         skipNegotiation: true,
-        transport: HttpTransportType.WebSockets
+        withCredentials: true,
+        transport: HttpTransportType.WebSockets,
+        accessTokenFactory: () => {
+          return this.authData?.accessToken!
+        }
       }).build();
 
 
-    this.connection?.on('insert', (data: any) => {
+    this.connection?.on('insert', (data: Calendario) => {
       this.store.push([{ type: 'insert', data }]);
-      console.log(data);
     });
 
-    this.connection?.on('update', (data: any) => {
+    this.connection?.on('update', (data: Calendario) => {
       this.store.push([{ type: 'update', data, key: data.Id }]);
-      console.log(data);
     });
 
-    this.connection?.on('delete', (data) => {
+    this.connection?.on('delete', (data: Calendario) => {
       this.store.push([{ type: 'remove', key: data.Id }]);
-      console.log(data);
     });
-
   }
 
   getState = (e: number) => {
@@ -100,24 +121,30 @@ export class CalendarioComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
 
+    StoreX.local.set('currentView', this.currentView);
+
     if (this.connection?.state == HubConnectionState.Connected) {
-      this.connection.stop();
+      this.connection?.invoke('unsubscribe', ['Calendario']).then(() => this.connection?.stop());
     }
 
   }
 
   ngOnInit(): void {
 
+   this.currentView =  <ViewType>StoreX.local.get('currentView') ?? 'week';
+
     this.connection?.start()
-      .then(_ => {
-        console.log('Connection Started');
+      .then(async _ => {
+        await this.connection?.invoke('subscribe', 'Calendario');
       }).catch(error => {
+        notify('Las actualización en tiempo real esta fuera de linea', 'error', 5000);
         return console.error(error);
       });
 
   }
 
   onAddAppointment = () => {
+    this.appointmentData = null;
     this.editCita?.show();
   }
 
@@ -127,6 +154,34 @@ export class CalendarioComponent implements OnInit, OnDestroy {
 
   onAppointmentFormOpening = async (e: AppointmentFormOpeningEvent) => {
     e.cancel = true;
-    await this.editCita?.show(e.appointmentData);
+    await this.editCita?.show(this.appointmentData);
+  }
+
+  onCellContextMenu = (e: CellContextMenuEvent) => {
+    this.target = this.cellClassName;
+    this.appointmentData = {
+      Finicio: e.cellData.startDate,
+      Ftermino: e.cellData.endDate,
+    }
+
+    this.contextMenuItems = [
+      {
+        icon: 'plus',
+        text: 'Nueva Cita',
+        onItemClick: async () => await this.editCita?.show(this.appointmentData)
+      }
+    ];
+
+
+  }
+
+  onAppointmentContextMenu = (e: AppointmentContextMenuEvent) => {
+    this.target = this.appointmentClassName;
+    this.appointmentData = e.appointmentData;
+    this.contextMenuItems = this.menuEdit;
+  }
+
+  onContextMenuItemClick(e: any) {
+    e.itemData.onItemClick(e);
   }
 }

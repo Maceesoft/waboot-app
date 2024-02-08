@@ -1,12 +1,33 @@
 @import "../../../themes/generated/variables.base.scss";
 
-:host {
-    display: block;
-    padding: 10px;
-}
-
 .grid-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     font-size: 22px;
     font-weight: bold;
     color: $base-accent;
+}
+
+.group-template {
+    padding: 10px;
+}
+
+::ng-deep .dx-group-cell {
+    padding: 0!important;
+}
+
+.row-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.row-group > i {
+    font-size: 16px;
+}
+
+.logo-w {
+    height: 30px;
+    width: 30px;
 }

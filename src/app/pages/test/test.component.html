@@ -1,0 +1,17 @@
+<input #file type="file" hidden (change)="filePickerClick($event)" />
+<dx-text-box #text [readOnly]="true" [buttons]="[
+    {
+        name: 'px',
+        options: {
+            icon: 'home',
+            disabled: false,
+            stylingMode: 'text',
+            onClick: fileClick
+        }
+    }
+]">
+</dx-text-box>
+
+<dx-button text="Cargar File" icon="fa-light fa-upload" type="default" (onClick)="uploadClick()">
+
+</dx-button>

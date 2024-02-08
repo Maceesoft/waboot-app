@@ -1,53 +1,57 @@
-<dx-data-grid #grid [dataSource]="usuariosDs" [showColumnLines]="true" [wordWrapEnabled]="true"
-    (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" [rowAlternationEnabled]="true">
-    <dxo-editing [allowAdding]="true" [allowDeleting]="true" [allowUpdating]="true" [useIcons]="true" mode="popup">
-        <dxo-popup title="Editar Usuario" [showTitle]="true" height="auto" width="60%" [minWidth]="400">
-        </dxo-popup>
-        <dxo-form>
-            <dxi-item dataField="Nombre" [colSpan]="2">
-                <dxi-validation-rule type="required" />
-            </dxi-item>
-            <dxi-item dataField="UserName">
-                <dxi-validation-rule type="async" [validationCallback]="validationCallback" />
-                <dxi-validation-rule type="required" />
-            </dxi-item>
-            <dxi-item dataField="Role" [editorOptions]="{readOnly: true, }" />
-            <dxi-item dataField="Password" [editorOptions]="{mode: modePwdField, buttons: passButtons}">
-                <dxo-label text="Contraseña" />
-                <dxi-validation-rule type="required" />
-            </dxi-item>
-            <dxi-item itemType="group">
-                <dxi-item dataField="Activo" [editorOptions]="{text: 'Activo', iconSize: 20}">
-                    <dxo-label [visible]="false" />
+<host-component #host>
+    <dx-data-grid #grid [dataSource]="usuariosDs" [showColumnLines]="true" [wordWrapEnabled]="true"
+        (onInitNewRow)="onInitNewRow($event)" (onEditingStart)="onEditingStart($event)" [rowAlternationEnabled]="true" 
+        [height]="host.element?.clientHeight" [showBorders]="true">
+        <dxo-editing [allowAdding]="true" [allowDeleting]="true" [allowUpdating]="true" [useIcons]="true" mode="popup">
+            <dxo-popup title="Editar Usuario" [showTitle]="true" height="auto" width="60%" [minWidth]="400">
+            </dxo-popup>
+            <dxo-form>
+                <dxi-item dataField="Nombre" [colSpan]="2">
+                    <dxi-validation-rule type="required" />
                 </dxi-item>
-                <dxi-item dataField="ChangedPasswordFirstLogin"
-                    [editorOptions]="{text: 'Cambiar contraseña al primer inicio de sesión', iconSize: 20}">
-                    <dxo-label [visible]="false" />
+                <dxi-item dataField="UserName">
+                    <dxi-validation-rule type="async" [validationCallback]="validationCallback" />
+                    <dxi-validation-rule type="required" />
                 </dxi-item>
+                <dxi-item dataField="Role" [editorOptions]="{readOnly: true, }" />
+                <dxi-item dataField="Password" [editorOptions]="{mode: modePwdField, buttons: passButtons}">
+                    <dxo-label text="Contraseña" />
+                    <dxi-validation-rule type="required" />
+                </dxi-item>
+                <dxi-item itemType="group">
+                    <dxi-item dataField="Activo" [editorOptions]="{text: 'Activo', iconSize: 20}">
+                        <dxo-label [visible]="false" />
+                    </dxi-item>
+                    <dxi-item dataField="ChangedPasswordFirstLogin"
+                        [editorOptions]="{text: 'Cambiar contraseña al primer inicio de sesión', iconSize: 20}">
+                        <dxo-label [visible]="false" />
+                    </dxi-item>
+                </dxi-item>
+            </dxo-form>
+        </dxo-editing>
+        <dxo-toolbar>
+            <dxi-item location="before">
+                <span class="grid-title ">
+                    <i class="fa-light fa-users"></i>
+                    Usuarios
+                </span>
             </dxi-item>
-        </dxo-form>
-    </dxo-editing>
-    <dxo-toolbar>
-        <dxi-item location="before">
-            <span class="grid-title ">
-                <i class="fa-light fa-users"></i>
-                Usuarios
-            </span>
-        </dxi-item>
-        <dxi-item widget="dxButton"
-            [options]="{icon: 'plus', text: 'NUEVO', type: 'default', stylingMode: 'contained', onClick: onAddNewClick}" />
-    </dxo-toolbar>
-    <dxi-column dataField="Nombre" [minWidth]="300" />
-    <dxi-column dataField="UserName" caption="Login" [width]="250" />
-    @if(authData?.user?.role == 'admin') {
-    <dxi-column dataField="Padre" caption="Propietario" [width]="250">
-        <dxo-lookup [dataSource]="usuarios" displayExpr="UserName" valueExpr="Id" />
-    </dxi-column>
-    }
-    <dxi-column dataField="ChangedPasswordFirstLogin" caption="Cambiar contraseña al primer inicio de sesión"
-        [width]="160" />
-    <dxi-column dataField="Role" caption="Rol" [width]="100" [visible]="false" [showInColumnChooser]="false" />
-    <dxi-column dataField="Activo" [width]="80" />
-    <dxi-column dataField="Password" [visible]="false" [showInColumnChooser]="false" />
-    <dxi-column dataField="Confirm" [visible]="false" [showInColumnChooser]="false" />
-</dx-data-grid>
+            <dxi-item widget="dxButton"
+                [options]="{icon: 'plus', text: 'NUEVO', type: 'default', stylingMode: 'contained', onClick: onAddNewClick}" />
+        </dxo-toolbar>
+        <dxo-pager [visible]="true" [showNavigationButtons]="true" [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" />
+        <dxi-column dataField="Nombre" [minWidth]="300" />
+        <dxi-column dataField="UserName" caption="Login" [width]="250" />
+        @if(authData?.user?.role == 'admin') {
+        <dxi-column dataField="Padre" caption="Propietario" [width]="250">
+            <dxo-lookup [dataSource]="usuarios" displayExpr="UserName" valueExpr="Id" />
+        </dxi-column>
+        }
+        <dxi-column dataField="ChangedPasswordFirstLogin" caption="Cambiar contraseña al primer inicio de sesión"
+            [width]="160" />
+        <dxi-column dataField="Role" caption="Rol" [width]="100" [visible]="false" [showInColumnChooser]="false" />
+        <dxi-column dataField="Activo" [width]="80" />
+        <dxi-column dataField="Password" [visible]="false" [showInColumnChooser]="false" />
+        <dxi-column dataField="Confirm" [visible]="false" [showInColumnChooser]="false" />
+    </dx-data-grid>
+</host-component>

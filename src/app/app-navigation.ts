@@ -5,6 +5,11 @@ export const navigation = [
     icon: 'fa-light fa-house'
   },
   {
+    text: 'Test',
+    path: '/test',
+    icon: 'fa-light fa-code-compare'
+  },
+  {
     text: 'Calendario',
     icon: 'fa-light fa-calendar',
     path: '/calendario'

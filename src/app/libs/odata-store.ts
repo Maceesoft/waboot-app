@@ -26,6 +26,12 @@ export class ODStore<TItem = any, TKey = any> extends ODataStore<TItem, TKey> {
             url: _resolveUrl(options?.url),
             withCredentials: true,
             deserializeDates: false,
+            onInserted(values, key) {
+
+            },
+            onUpdated(key, values) {
+
+            },
             errorHandler(e) {
                 console.log(e);
             },

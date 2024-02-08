@@ -8,11 +8,17 @@ import { ReporteComponent } from './pages/reporte/reporte.component';
 import { ContactosComponent } from './pages/contactos/contactos.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { TestComponent } from './pages/test/test.component';
 
 export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'test',
+    component: TestComponent,
     canActivate: [AuthGuard],
   },
   {

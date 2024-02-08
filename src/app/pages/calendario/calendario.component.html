@@ -1,16 +1,19 @@
 <div class="main">
     <dx-toolbar class="toolbar">
-        <dxi-item widget="dxButton" location="after" [options]="{icon: 'refresh', text: 'Actualizar', onClick: onRefreshView}" />
+        <dxi-item widget="dxButton" location="after"
+            [options]="{icon: 'refresh', text: 'Actualizar', onClick: onRefreshView}" />
         <dxi-item widget="dxButton" location="after"
             [options]="{icon: 'plus', text: 'Nueva Cita', type: 'default', stylingMode: 'contained', onClick: onAddAppointment}" />
     </dx-toolbar>
     <div #cont class="scheduler">
-        <dx-scheduler [height]="cont.clientHeight -1" #scheduler currentView="week"
+        <dx-scheduler [height]="cont.clientHeight -1" #scheduler currentView="week" [(currentView)]="currentView"
             [views]="['day', 'week', 'month', 'agenda']" [showCurrentTimeIndicator]="true" [dataSource]="clendariosDs"
             [shadeUntilCurrentTime]="true" [useDropDownViewSwitcher]="false" endDateExpr="Ftermino"
             startDateExpr="Finicio" textExpr="Asunto" appointmentTemplate="appoint-template"
             descriptionExpr="Descripcion" [maxAppointmentsPerCell]="2" appointmentTooltipTemplate="tooltip-template"
-            (onAppointmentFormOpening)="onAppointmentFormOpening($event)">
+            (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+            (onCellContextMenu)="onCellContextMenu($event)"
+            (onAppointmentContextMenu)="onAppointmentContextMenu($event)">
             <div *dxTemplate="let model of 'appoint-template'" class="appoint"
                 [ngClass]="getClassByState(model.appointmentData.Status)">
                 <i [ngClass]="getIconByState(model.appointmentData.Status)" style="font-size: 20px;"></i>
@@ -46,4 +49,6 @@
         </dx-scheduler>
     </div>
 </div>
+<dx-context-menu [target]="target" [items]="contextMenuItems" (onItemClick)="onContextMenuItemClick($event)"
+    [width]="160" />
 <edit-cita #editCita />

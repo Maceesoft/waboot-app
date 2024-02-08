@@ -1,0 +1,39 @@
+<dx-popup [(visible)]="visible" title="Editar Grupos" (onHidden)="onHidden()" maxWidth="700px" width="auto"
+    height="auto" minHeight="300px" maxHeight="600px">
+    <dx-data-grid #grid [dataSource]="groupsDs" [showColumnLines]="true" [showRowLines]="true"
+        (onInitNewRow)="onInitNewRow($event)">
+        <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" />
+        <dxi-column dataField="Id" [visible]="false" />
+        <dxi-column dataField="Nombre" caption="Grupo" />
+        <dxi-column dataField="Bcolor" caption="Color Fondo" [width]="100" editCellTemplate="color-editor"
+            cellTemplate="color-cell" alignment="right" />
+        <dxi-column dataField="Tcolor" caption="Color Texto" [width]="100" editCellTemplate="color-editor"
+            cellTemplate="color-cell" alignment="right" />
+        <dxi-column dataField="Icono" [width]="100" editCellTemplate="icon-editor" cellTemplate="icon-view" />
+        <div *dxTemplate="let cell of 'icon-view'">
+            <i [ngClass]="cell.value" style="font-size: 18px;"></i>
+        </div>
+        <div *dxTemplate="let cell of 'color-cell'">
+            <div [style.backgroundColor]="cell.value" style="display: block; width: 100%; height: 20px;"></div>
+        </div>
+        <div *dxTemplate="let cellInfo of 'color-editor'">
+            <dx-color-box [value]="cellInfo.value" (onValueChanged)="cellInfo.setValue($event.value)" />
+        </div>
+        <div *dxTemplate="let cellInfo of 'icon-editor'">
+            <dx-select-box [value]="cellInfo.value" placeholder="Selecione Icono" [items]="icons"
+                itemTemplate="item-template" fieldTemplate="fld-template"
+                (onValueChanged)="cellInfo.setValue($event.value)">
+                <div *dxTemplate="let icon of 'item-template'">
+                    <i [ngClass]="icon" style="font-size: 24px;"></i>
+                </div>
+                <div *dxTemplate="let icon of 'fld-template'">
+                    <dx-text-box [readOnly]="true"
+                        [buttons]="[{name: 'x', location: 'before',  options: {icon: icon, disabled: false, stylingMode: 'text'}}]">
+                    </dx-text-box>
+                </div>
+            </dx-select-box>
+        </div>
+    </dx-data-grid>
+    <dxi-toolbar-item widget="dxButton" location="after"
+        [options]="{icon: 'plus', text: 'NUEVO', type: 'default', stylingMode: 'contained', onClick: addNewRowClick}" />
+</dx-popup>

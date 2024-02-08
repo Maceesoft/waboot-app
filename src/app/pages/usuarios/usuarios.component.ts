@@ -8,11 +8,12 @@ import { AuthData } from '../../models/auth-data';
 import { EditingStartEvent, InitNewRowEvent } from 'devextreme/ui/data_grid';
 import { ValueChangedEvent } from 'devextreme/ui/text_box';
 import { TextEditorButton } from 'devextreme/common';
+import { HostComponent } from '../../shared/components/host/host.component';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule, DxDataGridModule],
+  imports: [CommonModule, DxDataGridModule, HostComponent],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss'
 })

@@ -1,3 +1,4 @@
+
 export const Setting = {
     debug : false,
     domain : 'https://wb.maceesoft.com',

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { DxFormComponent, DxFormModule, DxPopupModule, DxTextAreaModule } from 'devextreme-angular';
-import { Subject, firstValueFrom } from 'rxjs';
+import { Subject, firstValueFrom, ignoreElements } from 'rxjs';
 import { AppointStateArray } from '../../../../helpers/appoint-state';
 import { HidingEvent } from 'devextreme/ui/popup';
 import { OContext } from '../../../../helpers/ocontext';
@@ -9,6 +9,7 @@ import { alert } from 'devextreme/ui/dialog';
 import DataSource from 'devextreme/data/data_source';
 import { StoreX } from '../../../../libs/store';
 import { AuthData } from '../../../../models/auth-data';
+import { FormatHelper } from '../../../../helpers/format';
 
 @Component({
   selector: 'edit-cita',
@@ -30,6 +31,12 @@ export class EditCitaComponent {
 
   contactos = new DataSource({
     store: OContext.Contactos(),
+    map: (item) => {
+      return {
+        ...item,
+        DisplayText: `${item.Nombre} - ${FormatHelper.phoneNumber(item.Codigo, item.WhatsApp)}`
+      };
+    },
     filter: ['Usuario', '=', this.currentId]
   });
 
