@@ -1,0 +1,61 @@
+.toolbar {
+    display: flex;
+    gap: 10px;
+}
+
+.popup {
+    display: flex;
+    height: 100%;flex-direction: column;
+    overflow: hidden;
+}
+
+.steper {
+    display: flex;
+    gap: 10px;
+    font-size: 32px;
+    align-items: center;
+    color: #cccccc;
+    margin-bottom: 10px;
+}
+
+.steper > span {
+    display: block;
+    height: 1px;
+    width: 64px;
+    background-color: #cccccc;
+}
+
+.row-field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.data-container {
+    display: flex;
+    gap: 10px;
+}
+.title-datasource {
+    padding: 5px 10px;
+    background-color: #001b79;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.datasources {
+    margin-top: 15px;
+    border: 1px solid #dddddd;
+    padding: 5px;
+}
+
+.host-data {
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.page-workshett {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

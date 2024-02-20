@@ -1,0 +1,33 @@
+@import '../../../../../../themes/generated/variables.base.scss';
+
+.button {
+    display: flex;
+    align-items: center;
+    font-size: 32px;
+    color: #dddddd;
+}
+
+.icono:hover:has(.button-active){
+    cursor: pointer;
+    filter: brightness(80%);
+}
+
+.icono:active {
+    cursor: pointer;
+    transform: scale(1.0);
+}
+
+.separator {
+    height: 0.5px;
+    display: block;
+    min-width: 80px;
+    background-color: #dddddd;
+}
+
+.button-active {
+    color: #f71e78;
+}
+
+.separator-active {
+    background-color: #f71e78;
+}

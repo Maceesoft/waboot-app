@@ -10,17 +10,26 @@ export const AuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     const authService = inject(AuthService);
     const router = inject(Router);
     const authData = StoreX.session.getObj<AuthData>('auth');
+    const cRole = !!!route.routeConfig?.data ? '' : route.routeConfig?.data!['role'];
+
+    console.log(cRole);
+    console.log(route.routeConfig?.data);
 
     const isLoggedIn = authService.loggedIn;
-    let isRouterSecure= false;
+    let isRouterSecure = false;
 
-    if (!!authData && !!authData.user.padre) {
-        isRouterSecure = [
-            'usuarios'
-        ].includes(route.routeConfig?.path || defaultPath);
+    if (!!authData && cRole != '' && authData.user.role != 'admin') {
 
-        if (isRouterSecure) {
+        if (cRole == 'admin') {
+            isRouterSecure = true;
             router.navigate(['/home']);
+        } else {
+            if (!!authData.user.padre) {
+                isRouterSecure = true;
+                router.navigate(['/home']);
+            } else {
+                isRouterSecure = false;
+            }
         }
     }
 

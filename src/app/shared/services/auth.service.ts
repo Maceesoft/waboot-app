@@ -77,6 +77,7 @@ export class AuthService {
 
   async logOut() {
     StoreX.session.setObj('auth', null);
+    StoreX.session.set('time', null);
     this.router.navigate(['/login-form']);
   }
 }

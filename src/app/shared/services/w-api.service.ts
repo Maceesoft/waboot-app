@@ -19,6 +19,18 @@ export interface deleteResponse {
   success: boolean;
 }
 
+export interface createTemplateResponse {
+  id: string;
+  status: string;
+  category: string;
+}
+
+export interface listTemplateResponse {
+  id: string;
+  status: string;
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -71,6 +83,34 @@ export class WApiService {
       });
     },
   };
+
+  Template = {
+    Create: (name: string, components: Array<any>) => {
+      let body = {
+        name: name,
+        category: 'UTILITY', //AUTHENTICATION, MARKETING
+        allow_category_change: true,
+        language: 'es',
+        components: components
+      };
+
+
+      const url = `${this.WaUrl}/240329252490866/message_templates`;
+      return this.http.post<createTemplateResponse>(url, body, {
+        headers: {
+          Authorization: `Bearer ${this.token}`
+        }
+      });
+    },
+    List: () => {
+      const url = `${this.WaUrl}/240329252490866/message_templates`;
+      return this.http.get<listTemplateResponse>(url, {
+        headers: {
+          Authorization: `Bearer ${this.token}`
+        }
+      });
+    }
+  }
 
   get WaUrl() {
     return 'https://graph.facebook.com/v19.0'

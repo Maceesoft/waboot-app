@@ -1,7 +1,7 @@
 <dx-popup [(visible)]="visible" title="Editar Grupos" (onHidden)="onHidden()" maxWidth="700px" width="auto"
     height="auto" minHeight="300px" maxHeight="600px">
     <dx-data-grid #grid [dataSource]="groupsDs" [showColumnLines]="true" [showRowLines]="true"
-        (onInitNewRow)="onInitNewRow($event)">
+        (onInitNewRow)="onInitNewRow($event)" (onRowUpdated)="onRowUpdated($event)" (onRowInserted)="onRowInserted($event)">
         <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" />
         <dxi-column dataField="Id" [visible]="false" />
         <dxi-column dataField="Nombre" caption="Grupo" />

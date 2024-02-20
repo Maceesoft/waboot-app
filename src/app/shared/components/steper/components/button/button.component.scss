@@ -1,0 +1,26 @@
+.btn-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 5px;
+  color: rgb(42, 42, 42);
+}
+
+.separator {
+  height: 1px;
+  display: block;
+  background-color: rgb(42, 42, 42);
+}
+
+.icon:active {
+    transform: scale(0.9);
+}
+
+
+.active {
+    color: orangered;
+}
+
+.separator-active {
+    background-color: orangered;
+}

@@ -1,0 +1,6 @@
+@if(items) {
+@for (item of items; track $index) {
+<step-button [index]="$index" [cssIcon]="item.cssIcon" [isFirst]="$index == 0" (onClick)="onItemClick($event)"
+    [active]="$index <= selectIndex" />
+}
+}

@@ -48,10 +48,16 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
         return { ...item, expanded: !this._compactMode }
       });
 
-      if(this.authData?.user.role != 'admin' && this.authData?.user.padre != null){
-        this._items = (<Array<any>>this._items).filter(o=> o.role != 'client');
-      }
+      if (this.authData?.user.role != 'admin') {
+        const freePages = (<Array<any>>this._items).filter(o => !!!o.role);
 
+        if (this.authData?.user.padre == null) {
+          let authPages = (<Array<any>>this._items).filter(o => o.role == 'client');
+          this._items = [...freePages, ...authPages]
+        } else {
+          this._items = freePages;
+        }
+      }
     }
 
     return this._items;

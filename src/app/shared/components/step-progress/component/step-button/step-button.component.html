@@ -1,0 +1,4 @@
+<div class="button">
+    @if(!isFirst) { <div [ngClass]="active? 'separator separator-active' : 'separator'"></div> }
+    <i class="icono" [ngClass]="active? cssIcon + ' button-active' : cssIcon" (click)="onClick()"></i>
+</div>

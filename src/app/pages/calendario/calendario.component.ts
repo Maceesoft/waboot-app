@@ -171,8 +171,6 @@ export class CalendarioComponent implements OnInit, OnDestroy {
         onItemClick: async () => await this.editCita?.show(this.appointmentData)
       }
     ];
-
-
   }
 
   onAppointmentContextMenu = (e: AppointmentContextMenuEvent) => {

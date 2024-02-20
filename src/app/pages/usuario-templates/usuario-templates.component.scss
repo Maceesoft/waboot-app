@@ -1,0 +1,56 @@
+.main {
+  display: flex;
+  gap: 5px;
+  background-color: white;
+  position: relative;
+  align-items: stretch;
+  height: 100%;
+}
+
+.loading {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #5656563d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+:host {
+  ::ng-deep
+    .dx-datagrid-rowsview
+    .dx-row-focused.dx-data-row
+    > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-datagrid-invalid) {
+    background-color: #001a791f;
+  }
+
+  ::ng-deep .dx-list-items {
+    border-bottom: 1px solid #dddddd;
+  }
+
+  ::ng-deep .dx-list-item:last-of-type{
+    margin: 0 5px;
+    padding-left: 5px;
+   // border: 1px solid #dddddd;
+  //  border-radius: 5px
+  }
+
+  .item-temp {
+    font-size: 20px;
+  }
+
+  .header {
+    background-color: #B2BAD7;
+    padding: 9px 10px;
+    color: #001b97;
+    font-weight: bold;
+  }
+
+  .temp-div {
+    flex: 1;
+    border: 1px solid #dddddd;
+  }
+}

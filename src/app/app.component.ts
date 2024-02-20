@@ -37,7 +37,7 @@ export class AppComponent {
     config({
       licenseKey: 'm4ASfplEMLZYMMTCJFMlX1jwMcdbaUNh1TU23szT6vKu0gKfVS52wzC8OTuj8TKXCsCmwiSsNx+gG9fI8GTQN4xzh73d1FZCTProLQbwLQm4rxO6t+kAA0UPaZliI8k3iuuqeA==AAAAAAAAAAAAAAAAAAAAAAAAAAAyMzIsOTIyMzM3MjAzNjg1NDc3NTgwNyw5MjIzMzcyMDM2ODU0Nzc1ODA3LE1hY2Vlc29mdCwxODY3NTIxMjY3LDMsMjExOQ=='
     });
-
+    
     dxTextBox.defaultOptions({
       options: {
         inputAttr: { 'style': 'text-transform: uppercase' }

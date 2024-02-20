@@ -1,0 +1,6 @@
+@if(items) {
+@for (item of items; track $index) {
+<x-button [cssIcon]="item.cssIcon" [isFisrt]="$index == 0" [index]="$index" [active]="$index <= selectIndex"
+    (onIndexChange)="onIndexChange($event)" />
+}
+}

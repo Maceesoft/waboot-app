@@ -9,6 +9,10 @@ import { ContactosComponent } from './pages/contactos/contactos.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { TestComponent } from './pages/test/test.component';
+import { CampanaComponent } from './pages/campana/campana.component';
+import { FuentesDatosComponent } from './pages/fuentes-datos/fuentes-datos.component';
+import { TemplatesComponent } from './pages/templates/templates.component';
+import { UsuarioTemplatesComponent } from './pages/usuario-templates/usuario-templates.component';
 
 export const routes: Routes = [
   {
@@ -27,9 +31,33 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'campanas',
+    component: CampanaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'usuarios',
     component: UsuariosComponent,
     canActivate: [AuthGuard],
+    data: {
+      role: 'Client'
+    }
+  },
+  {
+    path: 'templates',
+    component: TemplatesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'admin'
+    }
+  },
+  {
+    path: 'usuario-templates',
+    component: UsuarioTemplatesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'admin'
+    }
   },
   {
     path: 'contactos',
@@ -44,6 +72,11 @@ export const routes: Routes = [
   {
     path: 'reporte',
     component: ReporteComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'fuentes-datos',
+    component: FuentesDatosComponent,
     canActivate: [AuthGuard]
   },
   {

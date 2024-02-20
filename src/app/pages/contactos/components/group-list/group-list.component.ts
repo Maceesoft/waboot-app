@@ -4,7 +4,7 @@ import { DxColorBoxModule, DxDataGridComponent, DxDataGridModule, DxFormModule, 
 import DataSource from 'devextreme/data/data_source';
 import { Subject, firstValueFrom } from 'rxjs';
 import { OContext } from '../../../../helpers/ocontext';
-import { InitNewRowEvent } from 'devextreme/ui/data_grid';
+import { InitNewRowEvent, RowInsertedEvent, RowUpdatedEvent } from 'devextreme/ui/data_grid';
 
 @Component({
   selector: 'group-list',
@@ -20,6 +20,7 @@ export class GroupListComponent {
 
   protected visible = false;
   protected hook: Subject<boolean> | undefined;
+  protected hasChanged = false;
   protected groupsDs = new DataSource({
     store: OContext.WGrupos(),
     filter: ['Usuario', '=', 0]
@@ -34,6 +35,7 @@ export class GroupListComponent {
 
   show = (opts: { userId: number }) => {
     this.hook = new Subject<boolean>();
+    this.hasChanged = false;
     this.visible = true;
     this.itemId = opts.userId;
     this.groupsDs.filter(['Usuario', '=', opts.userId]);
@@ -44,6 +46,7 @@ export class GroupListComponent {
 
   protected onHidden = () => {
     if (this.hook?.observed) {
+      this.hook.next(this.hasChanged);
       this.hook.complete();
       this.hook.unsubscribe();
     }
@@ -58,5 +61,13 @@ export class GroupListComponent {
     e.data = {
       Usuario: this.itemId
     };
+  }
+
+  protected onRowUpdated = (e: RowUpdatedEvent) => {
+    this.hasChanged = true;
+  }
+
+  protected onRowInserted = (e: RowInsertedEvent) => {
+    this.hasChanged = true;
   }
 }

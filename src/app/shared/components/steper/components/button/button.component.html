@@ -1,0 +1,6 @@
+<div class="btn-container">
+    @if(!isFisrt) {
+    <span [ngClass]="active? 'separator separator-active' : 'separator'" [style.width]="'80px'"></span>
+    }
+    <i class="icon" [style.fontSize]="iconSize" [ngClass]="active? cssIcon + ' active' : cssIcon" (click)="onClick()"></i>
+</div>

@@ -1,0 +1,71 @@
+<dx-popup [(visible)]="visible" (onHidden)="onHidden()" width="100%" [maxWidth]="600" [minHeight]="300" height="auto"
+    [title]="title">
+    <div class="popup">
+
+        <div style="display: flex; justify-content: center;">
+            <step-progress #steper [items]="steps" [selectIndex]="step" (onSelectIndex)="selectStepChange($event)"
+                [indexChanging]="validChangeStep" />
+        </div>
+        <div class="host-data">
+            @switch (step) {
+            @case (0) {
+            <div class="page-workshett">
+                <label class="step-1">Archivo de Excel
+                    <dx-text-box [readOnly]="true" [buttons]="[
+                    {
+                        name: 'x',
+                        options: {
+                            icon: 'folder',
+                            disabled: false,
+                            stylingMode: 'text',
+                            onClick: openExcel,
+                        }
+                    }
+                ]" [value]="fileStr" (onInitialized)="onFileInitialized($event)" />
+                </label>
+                <label>
+                    Hoja que contiene los datos:
+                    <dx-select-box placeholder="Selecione" [dataSource]="sheetsDs" displayExpr="name"
+                        [(value)]="sheet" />
+                </label>
+                <dx-check-box [iconSize]="20" text="Encabezado en la primera fila" [(value)]="rowHeader" />
+            </div>
+            }
+            @case (1) {
+            <div>
+                <dx-select-box placeholder="Selecione una plantilla" [dataSource]="plantillasDs"
+                    displayExpr="PlantillaNavigation.Nombre" [(value)]="plantilla"
+                    (onSelectionChanged)="onPlantillaSelectionChanged($event)" />
+            </div>
+            }
+            @case (2) {
+            <dx-form #form [scrollingEnabled]="true" [colCount]="2" [(formData)]="parametros" [height]="200">
+                @if(!!plantilla) {
+                @for (par of plantilla.ParametrosArray; track $index) {
+                <dxi-item [dataField]="par.Parametro" editorType="dxSelectBox"
+                    [editorOptions]="{placeholder: 'Selecione una columna', dataSource: columnsDs, displayExpr: 'key'}">
+                    <dxo-label [text]="par.Etiqueta" />
+                    <dxi-validation-rule type="required" />
+                </dxi-item>
+                }
+                }
+            </dx-form>
+            }
+            @case (3) {
+            <dx-data-grid width="100%" [height]="200" [dataSource]="exportedDataDs" [showColumnLines]="true"
+                [showBorders]="true">
+                @for (item of plantilla.ParametrosArray; track $index) {
+                <dxi-column [dataField]="item.Parametro" [caption]="item.Etiqueta" [minWidth]="160" />
+                }
+            </dx-data-grid>
+            }
+            }
+        </div>
+    </div>
+    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+        [options]="{icon: 'fa-regular fa-arrow-left', text: 'Prev.', onClick: onPrevStep, disabled: step == 0}" />
+    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{icon: 'fa-regular fa-arrow-right', text: 'Sig.', rtlEnabled: true, onClick: onNextStep, 
+    disabled: step == 3}" />
+</dx-popup>
+<input hidden type="file" #file accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    (change)="inputChange($event)" />

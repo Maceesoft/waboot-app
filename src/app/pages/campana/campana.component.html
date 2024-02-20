@@ -1,0 +1,10 @@
+<host-component>
+    <dx-data-grid [showBorders]="true" [showColumnLines]="true">
+        <dxo-toolbar>
+            <dxi-item widget="dxSelectBox" location="before" [options]="{dataSource: plantillasDs, displayExpr: 'PlantillaNavigation.Nombre',
+        valueExpr: 'Plantilla', placeholder: 'Selecione una plantilla', width: 250}" />
+            <dxi-item widget="dxSelectBox" location="before" [options]="{dataSource: plantillasDs, displayExpr: 'PlantillaNavigation.Nombre',
+        valueExpr: 'Plantilla', placeholder: 'Selecione una fuente de datos', width: 250}" />
+        </dxo-toolbar>
+    </dx-data-grid>
+</host-component>

@@ -1,0 +1,44 @@
+<dx-popup [(visible)]="visible" (onHidden)="onHidden()" [enableBodyScroll]="false" title="Editar Plantilla y Parametros"
+    [disabled]="loading">
+    <div style="display: flex; flex-direction: column; padding: 10px 0; height: 100%; width: 100%; gap: 10px; overflow: hidden;">
+        <div class="name-div">
+            <div style="display: flex; gap: 5px; align-items: center;">
+                <span>PLANTILLA: </span>
+                <dx-text-box style="flex: 1;" [(value)]="tempName" />
+            </div>
+            <div class="title">
+                <span>PARAMETROS</span>
+            </div>
+        </div>
+        <div #parent style="display: flex; width: 100%; gap: 10px; flex: 1; position: relative;">
+            <dx-scroll-view style="flex: 1;" [height]="parent.clientHeight">
+                <json-editor #jsonEditor [options]="editorOptions" [data]="emptyJson" (change)="jsonChange($event)" />
+            </dx-scroll-view>
+            <dx-data-grid #grid style="flex: 1;" [showColumnLines]="true" [dataSource]="parametersDs"
+                [height]="parent.clientHeight" [showBorders]="true">
+                <dxo-editing [allowDeleting]="true" [allowUpdating]="true" mode="row">
+                    <dxo-texts confirmDeleteTitle="Confirmar" />
+                </dxo-editing>
+                <dxi-column dataField="Parametro">
+                    <dxi-validation-rule type="required" />
+                </dxi-column>
+                <dxi-column dataField="Etiqueta">
+                    <dxi-validation-rule type="required" />
+                </dxi-column>
+                <dxi-column dataField="Tooltip">
+                    <dxi-validation-rule type="required" />
+                </dxi-column>
+                <dxi-column type="buttons" headerCellTemplate="buttons-template">
+
+                </dxi-column>
+                <div *dxTemplate="let cell of 'buttons-template'">
+                    <dx-button icon="plus" (onClick)="addNewClick()" />
+                </div>
+            </dx-data-grid>
+        </div>
+    </div>
+    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+        [options]="{icon: 'save', text: 'Guardar', stylingMode: 'contained', type: 'default', onClick: saveData}" />
+    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+        [options]="{icon: 'undo', text: 'Cancelar', stylingMode: 'contained', type: 'normal', onClick: cancel}" />
+</dx-popup>

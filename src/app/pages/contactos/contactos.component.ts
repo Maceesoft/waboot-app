@@ -41,7 +41,6 @@ export class ContactosComponent {
     filter: this.curFilter,
   });
 
-  selecionar = false;
   countryMenu = Countries();
   country: any;
 
@@ -73,13 +72,6 @@ export class ContactosComponent {
     }
   }
 
-  onCheck = () => {
-    this.selecionar = !this.selecionar;
-    this.grid?.instance.option('selection', {
-      mode: this.selecionar ? 'multiple' : 'none'
-    });
-  }
-
   onMenuCountryClick = (e: any) => {
     this.country = e.itemData;
 
@@ -90,9 +82,13 @@ export class ContactosComponent {
   }
 
   onGroupMenuClick = async () => {
-    await this.groupList?.show({
+    const result = await this.groupList?.show({
       userId: this.currentId!
     });
+
+    if(result) {
+      this.grid?.instance.refresh();
+    }
   }
 
   customizePhoneText = (data: any) => {

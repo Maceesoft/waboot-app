@@ -1,0 +1,20 @@
+<host-component #host>
+    <dx-data-grid #grid [dataSource]="plantillasDs" [showBorders]="true" [showColumnLines]="true"
+        [height]="host.element?.clientHeight" [wordWrapEnabled]="true">
+        <dxo-toolbar>
+            <dxi-item widget="dxButton" [options]="{icon: 'plu  s', text: 'Agregar', onClick: addNewClick}" />
+        </dxo-toolbar>
+        <dxo-editing [allowDeleting]="true" [allowUpdating]="true" />
+        <dxi-column dataField="Nombre" [width]="300" />
+        <dxi-column dataField="Plantilla1" cellTemplate="json-cell" />
+        <dxi-column dataField="Parametros" cellTemplate="json-cell" />
+        <dxi-column type="buttons">
+            <dxi-button icon="edit" [onClick]="onEditClick" />
+            <dxi-button icon="trash" />
+        </dxi-column>
+        <div *dxTemplate="let cell of 'json-cell'">
+            <code>{{formatJson(cell.value)}}</code>
+        </div>
+    </dx-data-grid>
+</host-component>
+<edit-tamplate #editTemp />

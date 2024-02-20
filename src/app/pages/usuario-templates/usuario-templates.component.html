@@ -1,0 +1,24 @@
+<host-component>
+    <div id="panel" class="main">
+        <dx-data-grid #grid [dataSource]="usuariosDs" style="flex: 1;" [focusedRowEnabled]="true" [showBorders]="true"
+            (onFocusedRowChanged)="onFocusedRowChanged($event)" [(focusedRowKey)]="rowKey">
+            <dxi-column dataField="Id" [visible]="false" />
+            <dxi-column dataField="Nombre" caption="CLIENTES" />
+        </dx-data-grid>
+        <div class="temp-div">
+            <div class="header">PLANTILLAS ASIGNADAS</div>
+            <dx-list #list [dataSource]="plantillasDs" displayExpr="Nombre" selectionMode="none"
+                [showSelectionControls]="true" (onSelectionChanged)="onSelectionChanged($event)"
+                itemTemplate="item-temp" [selectByClick]="false">
+                <div class="item-temp" *dxTemplate="let cell of 'item-temp'">
+                    {{cell.Nombre}}
+                </div>
+            </dx-list>
+        </div>
+        @if(loading){
+        <div class="loading">
+            <dx-load-indicator />
+        </div>
+        }
+    </div>
+</host-component>
