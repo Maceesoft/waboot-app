@@ -1,0 +1,28 @@
+<dx-popup [(visible)]="visible" (onHidden)="onHidden()" title="Vista previa de los datos importados"
+    [(fullScreen)]="fullscreen">
+    <dx-data-grid #grid [dataSource]="dataDs" [allowColumnResizing]="true" columnResizingMode="widget"
+        [showColumnLines]="true" [showBorders]="true" (onCellPrepared)="onCellPrepared($event)" height="100%"
+        [rowAlternationEnabled]="true">
+        <dxo-scrolling [scrollByContent]="true" />
+        <dxo-toolbar>
+            <dxi-item location="before">
+                <check-button cssIcon="fa-light fa-line-columns" text="Columnas auto"
+                    (onCheckChanged)="onColumnChanged($event)" />
+            </dxi-item>
+            <dxi-item location="before">
+                <check-button cssIcon="fa-regular fa-text-width" text="Ajustar texto"
+                    (onCheckChanged)="onCheckChanged($event)" />
+            </dxi-item>
+            <dxi-item location="after" widget="dxButton" [options]="{icon: 'save', text: 'Guardar', onClick: onSave}">
+            </dxi-item>
+        </dxo-toolbar>
+        <dxo-editing [allowDeleting]="true" [allowUpdating]="true" mode="cell" />
+        @for (item of parametros; track $index) {
+        <dxi-column [dataField]="item.Parametro" [caption]="item.Etiqueta">
+            @if(item.Obligatorio) { <dxi-validation-rule type="required" /> }
+        </dxi-column>
+        }
+    </dx-data-grid>
+    <dxi-toolbar-item widget="dxButton" location="after"
+        [options]="{icon: fullscreen? 'fa-light fa-minimize' : 'fa-light fa-maximize', onClick: onFullScreen}" />
+</dx-popup>

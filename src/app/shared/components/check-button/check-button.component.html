@@ -1,0 +1,5 @@
+<div class="div">
+    <input type="checkbox" [checked]="check" (change)="changeCheck($event)" />
+    @if (cssIcon) { <i [ngClass]="cssIcon"></i> }
+    @if (text) { <span>{{text}}</span> }
+</div>

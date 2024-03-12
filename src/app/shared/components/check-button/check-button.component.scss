@@ -1,0 +1,35 @@
+@import "../../../../themes/generated/variables.base.scss";
+
+.div {
+  position: relative;
+  height: fit-content;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 5px;
+  background-color: $base-bg;
+  color: $base-text-color;
+  border-radius: $base-border-radius;
+}
+
+.div > i {
+  font-size: 1rem;
+}
+
+.div > input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.div:hover {
+  background-color: rgba($color: $base-accent, $alpha: 0.15);
+}
+
+.div:has(input:checked) {
+  background-color: rgba($color: $base-accent, $alpha: 0.3);
+}

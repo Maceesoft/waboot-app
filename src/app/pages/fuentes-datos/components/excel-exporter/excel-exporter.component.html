@@ -1,5 +1,5 @@
-<dx-popup [(visible)]="visible" (onHidden)="onHidden()" width="100%" [maxWidth]="600" [minHeight]="300" height="auto"
-    [title]="title">
+<dx-popup #popup [(visible)]="visible" (onHidden)="onHidden()" width="100%" [maxWidth]="600" [minHeight]="300" height="auto"
+    [title]="title" [(fullScreen)]="fullscreen" [resizeEnabled]="true">
     <div class="popup">
 
         <div style="display: flex; justify-content: center;">
@@ -45,19 +45,24 @@
                 <dxi-item [dataField]="par.Parametro" editorType="dxSelectBox"
                     [editorOptions]="{placeholder: 'Selecione una columna', dataSource: columnsDs, displayExpr: 'key'}">
                     <dxo-label [text]="par.Etiqueta" />
-                    <dxi-validation-rule type="required" />
+                    @if(par.Obligatorio) { <dxi-validation-rule type="required" /> }
                 </dxi-item>
                 }
                 }
             </dx-form>
             }
             @case (3) {
-            <dx-data-grid width="100%" [height]="200" [dataSource]="exportedDataDs" [showColumnLines]="true"
-                [showBorders]="true">
-                @for (item of plantilla.ParametrosArray; track $index) {
-                <dxi-column [dataField]="item.Parametro" [caption]="item.Etiqueta" [minWidth]="160" />
-                }
-            </dx-data-grid>
+            <div style="min-height: 200px; height: 100%;">
+                <dx-data-grid width="100%" height="100%" [dataSource]="exportedDataDs" [showColumnLines]="true"
+                    [showBorders]="true">
+                    <dxo-editing mode="cell" [allowDeleting]="true" [allowUpdating]="true" />
+                    @for (item of plantilla.ParametrosArray; track $index) {
+                    <dxi-column [dataField]="item.Parametro" [caption]="item.Etiqueta" [minWidth]="160">
+                        @if(item.Obligatorio) {<dxi-validation-rule type="required" /> }
+                    </dxi-column>
+                    }
+                </dx-data-grid>
+            </div>
             }
             }
         </div>
@@ -66,6 +71,11 @@
         [options]="{icon: 'fa-regular fa-arrow-left', text: 'Prev.', onClick: onPrevStep, disabled: step == 0}" />
     <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton" [options]="{icon: 'fa-regular fa-arrow-right', text: 'Sig.', rtlEnabled: true, onClick: onNextStep, 
     disabled: step == 3}" />
+    <dxi-toolbar-item toolbar="bottom" location="after" widget="dxButton"
+        [options]="{icon: 'fa-regular fa-ballot-check', text: 'Sig.', rtlEnabled: true, onClick: validator}" />
+    <dxi-toolbar-item widget="dxButton" location="after"
+        [options]="{icon: fullscreen? 'fa-light fa-minimize' : 'fa-light fa-maximize', onClick: onFullScreen}" />
 </dx-popup>
 <input hidden type="file" #file accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     (change)="inputChange($event)" />
+<data-validator #dataValidator />

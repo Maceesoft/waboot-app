@@ -16,7 +16,7 @@
             </dx-scroll-view>
             <dx-data-grid #grid style="flex: 1;" [showColumnLines]="true" [dataSource]="parametersDs"
                 [height]="parent.clientHeight" [showBorders]="true">
-                <dxo-editing [allowDeleting]="true" [allowUpdating]="true" mode="row">
+                <dxo-editing [allowDeleting]="true" [allowUpdating]="true" mode="cell">
                     <dxo-texts confirmDeleteTitle="Confirmar" />
                 </dxo-editing>
                 <dxi-column dataField="Parametro">
@@ -25,8 +25,7 @@
                 <dxi-column dataField="Etiqueta">
                     <dxi-validation-rule type="required" />
                 </dxi-column>
-                <dxi-column dataField="Tooltip">
-                    <dxi-validation-rule type="required" />
+                <dxi-column dataField="Obligatorio" dataType="boolean" [editorOptions]="{iconSize: 24}" [width]="90">
                 </dxi-column>
                 <dxi-column type="buttons" headerCellTemplate="buttons-template">
 

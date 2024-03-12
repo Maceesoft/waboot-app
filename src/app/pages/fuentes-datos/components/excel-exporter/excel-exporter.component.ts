@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxFormComponent, DxFormModule, DxPopupModule, DxScrollViewModule, DxSelectBoxModule, DxTextBoxModule } from 'devextreme-angular';
+import { DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxFormComponent, DxFormModule, DxPopupComponent, DxPopupModule, DxScrollViewModule, DxSelectBoxModule, DxTextBoxModule } from 'devextreme-angular';
 import { Subject, firstValueFrom } from 'rxjs';
 import * as ExcelJS from 'exceljs';
 import ArrayStore from 'devextreme/data/array_store';
@@ -12,15 +12,22 @@ import { StepButton, SteperComponent } from '../../../../shared/components/stepe
 import { SelectionChangedEvent } from 'devextreme/ui/select_box';
 import { InitializedEvent } from 'devextreme/ui/text_box';
 import { StepProgressComponent } from '../../../../shared/components/step-progress/step-progress.component';
+import { DataValidatorComponent } from '../data-validator/data-validator.component';
 
 @Component({
   selector: 'excel-exporter',
   standalone: true,
-  imports: [CommonModule, DxDataGridModule, DxPopupModule, DxSelectBoxModule, DxFormModule, DxButtonModule, SteperComponent, DxTextBoxModule, DxScrollViewModule, StepProgressComponent, DxCheckBoxModule],
+  imports: [CommonModule, DxDataGridModule, DxPopupModule, DxSelectBoxModule, DxFormModule, DxButtonModule, SteperComponent, DxTextBoxModule, DxScrollViewModule, StepProgressComponent, DxCheckBoxModule, DataValidatorComponent],
   templateUrl: './excel-exporter.component.html',
   styleUrl: './excel-exporter.component.scss'
 })
 export class ExcelExporterComponent {
+  @ViewChild('popup')
+  popup?: DxPopupComponent;
+
+  @ViewChild('dataValidator')
+  dataValidator?: DataValidatorComponent;
+
   @ViewChild('steper')
   steper?: StepProgressComponent;
 
@@ -56,6 +63,7 @@ export class ExcelExporterComponent {
   protected visible = false;
   protected hook: Subject<boolean> | undefined;
   protected result = false;
+  protected fullscreen = false;
   protected sheetsStore = new ArrayStore<ExcelJS.Worksheet>({
     data: []
   });
@@ -207,6 +215,73 @@ export class ExcelExporterComponent {
     this.steper?.next();
   }
 
+  onFullScreen = () => {
+    this.fullscreen = !this.fullscreen;
+    this.popup?.instance.repaint();
+  }
+
+  protected validator = async () => {
+    await this.dataValidator?.show([
+      {
+        column1: 'uno',
+        column2: 'dos',
+        column3: 'Tres',
+        column4: 'Cuatro Cuatro Cuatro Cuatro Cuatro Cuatro Cuatro',
+        column5: 'Cinco Cinco Cinco Cinco Cinco Cinco Cinco',
+        column6: 'Seis',
+        column7: 'Siete'
+      },
+      {
+        column1: 'uno',
+        column2: 'dos',
+        column3: 'Tres',
+        column4: '',
+        column5: 'Cinco',
+        column6: '',
+        column7: 'Siete'
+      },
+      {
+        column1: 'uno',
+        column2: 'dos',
+        column3: 'Tres Tres Tres Tres Tres Tres Tres Tres Tres Tres Tres Tres Tres Tres Tres',
+        column4: 'Cuatro',
+        column5: 'Cinco',
+        column6: 'Seis',
+        column7: 'Siete'
+      },
+    ], [
+      {
+        Parametro: 'column1',
+        Etiqueta: 'Columna-1',
+      },
+      {
+        Parametro: 'column2',
+        Etiqueta: 'Columna-2',
+      },
+      {
+        Parametro: 'column3',
+        Etiqueta: 'Columna-3',
+      },
+      {
+        Parametro: 'column4',
+        Etiqueta: 'Columna-4',
+      },
+      {
+        Parametro: 'column5',
+        Etiqueta: 'Columna-5',
+      },
+      {
+        Parametro: 'column6',
+        Etiqueta: 'Columna-6',
+      },
+      {
+        Parametro: 'column7',
+        Etiqueta: 'Columna-7',
+      }
+    ]);
+
+  }
+
   protected inputChange = (e: Event) => {
     const ele = <HTMLInputElement>e.target;
     const files = <FileList>ele.files;
@@ -220,10 +295,11 @@ export class ExcelExporterComponent {
       }
 
       this.fileStr = files[0].name;
-
       const reader = new FileReader();
-
       reader.readAsArrayBuffer(files[0]);
+      (<any>e.target).value = '';
+      this.sheetsStore.clear();
+
       reader.onloadend = () => {
         var arrayBuffer = <ArrayBuffer>reader.result;
         var workbook = new ExcelJS.Workbook();

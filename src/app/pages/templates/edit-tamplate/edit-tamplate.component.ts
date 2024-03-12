@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { JsonEditorOptions, NgJsonEditorModule } from 'ang-jsoneditor';
 import { DxButtonModule, DxDataGridComponent, DxDataGridModule, DxPopupModule, DxScrollViewModule, DxTextBoxModule } from 'devextreme-angular';
 import { Subject, firstValueFrom } from 'rxjs';
@@ -12,7 +12,7 @@ import { OContext } from '../../../helpers/ocontext';
 export interface eParam {
   name: string;
   caption: string;
-  size: number;
+  required: number;
 }
 
 @Component({
@@ -22,7 +22,7 @@ export interface eParam {
   templateUrl: './edit-tamplate.component.html',
   styleUrl: './edit-tamplate.component.scss'
 })
-export class EditTamplateComponent implements OnInit {
+export class EditTamplateComponent {
   @ViewChild('grid')
   grid?: DxDataGridComponent;
 
@@ -34,7 +34,6 @@ export class EditTamplateComponent implements OnInit {
   protected emptyJson = ServiciosTransporteMessage.json;
   protected outJson: any; // = structuredClone(this.emptyJson);
   protected tempName: string = '';
-  protected parameter = new Array<eParam>();
   protected paramsData = new Array<any>();
   protected parametersDs = new DataSource({
     store: new ArrayStore({
@@ -42,7 +41,6 @@ export class EditTamplateComponent implements OnInit {
       onInserting(values) {
         values.Parametro = values.Parametro.toUpperCase();
         values.Etiqueta = values.Etiqueta.toLowerCase();
-        values.Tooltip = values.Tooltip.toLowerCase();
       }
     })
   });
@@ -59,69 +57,6 @@ export class EditTamplateComponent implements OnInit {
     this.editorOptions.expandAll = true;
     this.editorOptions.schema = ServiciosTransporteMessage.schema;
   }
-
-  ngOnInit(): void {
-    this.parameter.push({
-      name: 'PARAM_PHONE_1',
-      caption: 'Numero Telefonico',
-      size: 13
-    });
-
-    this.parameter.push({
-      name: 'PARM_IMAGE_1',
-      caption: 'Url de Imagen',
-      size: 512
-    });
-
-    this.parameter.push({
-      name: 'PARAM_TEXT1',
-      caption: 'Nombre del Cliente',
-      size: 512
-    });
-
-    this.parameter.push({
-      name: 'PARAM_TEXT2',
-      caption: 'Fecha del Servicio',
-      size: 512
-    });
-
-    this.parameter.push({
-      name: 'PARAM_TEXT3',
-      caption: 'Hora del Servicio',
-      size: 512
-    });
-
-    this.parameter.push({
-      name: 'PARAM_TEXT4',
-      caption: 'Conductor',
-      size: 512
-    });
-
-    this.parameter.push({
-      name: 'PARAM_TEXT5',
-      caption: 'Vehiculo',
-      size: 512
-    });
-
-    this.parameter.push({
-      name: 'PARAM_TEXT6',
-      caption: 'Placa',
-      size: 512
-    });
-
-    this.parameter.push({
-      name: 'PARAM_TEXT7',
-      caption: 'Telefono Condcutor',
-      size: 512
-    });
-
-    this.parameter.push({
-      name: 'PARAM_TEXT8',
-      caption: 'Telefono Contacto',
-      size: 512
-    });
-  }
-
 
   show = (data?: any) => {
     this.visible = true;
